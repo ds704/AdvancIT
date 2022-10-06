@@ -37,9 +37,10 @@ public class FifoQueue {
                     last = last.next;
                 }
                 last.next = new_node;
-                objectZaehler++;
+
 
             }
+            objectZaehler++;
             return list;
         }
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class FifoQueue {
     Node head;
+    public static int objectZaehler =0;
 
     public static void main(String[] args) {
         FifoQueue neueListe = new FifoQueue();
@@ -36,6 +37,7 @@ public class FifoQueue {
                     last = last.next;
                 }
                 last.next = new_node;
+                objectZaehler++;
 
             }
             return list;
@@ -44,11 +46,19 @@ public class FifoQueue {
             public static void get(FifoQueue list)
             {
                 Node currNode = list.head;
-                System.out.print("Linked List: ");
-                while (currNode != null) {
+                //System.out.print("Linked List: ");
+                System.out.println(currNode.data);
+                list.head = currNode.next;
+                objectZaehler--;
+                /*while (currNode != null) {
                     System.out.print(currNode.data + " ");
                     currNode = currNode.next;
-                }
+                }*/
+            }
+
+            public static int getLenth()
+            {
+                return objectZaehler;
             }
 
 

@@ -35,6 +35,7 @@ public class FifoQueue {
                 while (last.next != null) {
                     last = last.next;
                 }
+                last.next = new_node;
 
             }
             return list;

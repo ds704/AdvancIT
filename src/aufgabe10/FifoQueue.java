@@ -38,7 +38,6 @@ public class FifoQueue {
                 }
                 last.next = new_node;
 
-
             }
             objectZaehler++;
             return list;
@@ -48,7 +47,7 @@ public class FifoQueue {
             {
                 Node currNode = list.head;
                 //System.out.print("Linked List: ");
-                System.out.println(currNode.data);
+                //System.out.println(currNode.data);
                 list.head = currNode.next;
                 objectZaehler--;
                 /*while (currNode != null) {

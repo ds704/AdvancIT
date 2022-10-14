@@ -13,6 +13,7 @@ public class PhilosophenPart2 extends Thread{
         for(int i = 0; i<5; i++)
         {
             EssendePhilosophen[i] = false;
+            anzahlEssen[i] = 0;
         }
 
         for(int i = 0; i<5;i++)
@@ -26,10 +27,12 @@ public class PhilosophenPart2 extends Thread{
 
     int id;
 
+    static int[] anzahlEssen = new int[5];
     static PhilosophenPart2[] PhilosphenObejekt = new PhilosophenPart2[5];
 
     static Semaphore[] PhilosphenWarteschlange = new Semaphore[5];
     static Semaphore mutex = new Semaphore(1,true);
+    //static Semaphore mutex2 = new Semaphore(1,true);
 
 
     public static boolean[] EssendePhilosophen = new boolean[5];
@@ -42,7 +45,16 @@ public class PhilosophenPart2 extends Thread{
     }
     public void essen(int id)
     {
-        System.out.println("Der Philosoph mit der Id: " + Thread.currentThread() +" isst gerade!");
+        //try {
+          //  mutex2.acquire();
+            System.out.println("Der Philosoph mit der Id: " + id + " isst gerade!");
+            anzahlEssen[id]++;
+            //System.out.println("ich habe die id: " + id);
+            //mutex2.release();
+        //}catch(Exception e)
+        //{
+        //    e.printStackTrace();
+        //}
     }
 
     public void run()
@@ -50,7 +62,7 @@ public class PhilosophenPart2 extends Thread{
         try
         {
             while(true) {
-                Thread.sleep((long) (Math.random() * 1000));
+                //Thread.sleep((long) (Math.random() * 1000));
 
                 int linkerNachbar = id - 1;
                 int rechterNachbar = id + 1;
@@ -86,9 +98,11 @@ public class PhilosophenPart2 extends Thread{
                         } else if (i == 4) {
                             rechterNachbarAufrufen = 0;
                         }
-                        if (EssendePhilosophen[linkerNachbarAufrufen] == false & EssendePhilosophen[rechterNachbarAufrufen] == false) {
+                        if (EssendePhilosophen[linkerNachbarAufrufen] == false && EssendePhilosophen[rechterNachbarAufrufen] == false) {
                             PhilosphenWarteschlange[i].release();
-                            EssendePhilosophen[rechterNachbar] = true;
+                            wartendePhilisophen[i] = false;
+                            EssendePhilosophen[i] = true;
+                            break;
                         }
 
                     }

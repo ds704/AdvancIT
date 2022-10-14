@@ -47,7 +47,7 @@ public class Philosoph extends Thread{
             if(id > 4) {
                 GabelSemaphore[id].acquire();
                 GabelSemaphore[(id + 1) % 5].acquire();
-                System.out.println("Der Thread: " + Thread.currentThread() + " isst gerade!");
+                System.out.println("Der Thread: " + id + " isst gerade!");
                 Deadlockcounter++;
                 System.out.println("Es gab schon " + Deadlockcounter + " Gerichte");
                 GabelSemaphore[id].release();
@@ -55,7 +55,7 @@ public class Philosoph extends Thread{
             } else if(id == 4) {
                 GabelSemaphore[(id + 1) % 5].acquire();
                 GabelSemaphore[id].acquire();
-                System.out.println("Der Thread: " + Thread.currentThread() + " isst gerade!");
+                System.out.println("Der Thread: " + id + " isst gerade!");
                 Deadlockcounter++;
                 System.out.println("Es gab schon " + Deadlockcounter + " Gerichte");
                 GabelSemaphore[id].release();

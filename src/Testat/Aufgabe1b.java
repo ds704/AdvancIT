@@ -9,7 +9,7 @@ public class Aufgabe1b extends Thread {
     private int id;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { //Semaphore werden erzeugt Zug 0 Darf laut Aufgabenstellung als erster fahren deswgen Semaphore -> 1
         WarteschlangeSemaphore[0] = new Semaphore(1, true);
         WarteschlangeSemaphore[1] = new Semaphore(0, true);
         for (int i = 0; i < 2; i++) {
@@ -25,7 +25,7 @@ public class Aufgabe1b extends Thread {
 
     @Override
     public void run() {
-        try {
+        try { //hier muss gescaht werden um welche Lok es sich handelt, da Aufgabenstellung unterschiedliche Methoden für die Züge fordert
             while (id == 0) {
                 enterLok0();
                 exitLok0();
@@ -44,6 +44,7 @@ public class Aufgabe1b extends Thread {
         this.id = id;
     }
 
+    //Methoden für die Loks, sodass der Semaphore aufgerufen wird. Grund für diese Methoden ist die Aufgabenstellung mit dne individuellen Methoden
     private void enterLok0() {
         enterMutix();
     }
@@ -61,10 +62,7 @@ public class Aufgabe1b extends Thread {
     }
 
     private void enterMutix() {
-        /*if(Lok1Zuletztgefahren == true && id == 0)
-        {
-
-        } else ()*/
+        //hier wird sich an die Wiche angestellt, entweder ist die Wiche bereits umgestellt, dann kann der Zug durchfahren. Wenn nicht muss er warten
         try {
             WarteschlangeSemaphore[id].acquire();
             System.out.println("Der Zug nummer: " + id + " fährt jetzt");
@@ -75,7 +73,9 @@ public class Aufgabe1b extends Thread {
 
     }
 
-    private void exitMutix() {
+    private void exitMutix()
+    {
+        //hier wird die Wiche umgestellt, dass der ander Zug durchfahren kann
         int andererZug = id - 1;
         if (id == 0) {
             andererZug = 1;

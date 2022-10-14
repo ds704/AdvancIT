@@ -42,7 +42,7 @@ public class PhilosophenPart2 extends Thread{
     }
     public void essen(int id)
     {
-        System.out.println("Der Philosoph mit der Id: " + id +" isst gerade!");
+        System.out.println("Der Philosoph mit der Id: " + Thread.currentThread() +" isst gerade!");
     }
 
     public void run()
@@ -50,7 +50,7 @@ public class PhilosophenPart2 extends Thread{
         try
         {
             while(true) {
-                //Thread.sleep(int(Math.random() * 1000));
+                Thread.sleep((long) (Math.random() * 1000));
 
                 int linkerNachbar = id - 1;
                 int rechterNachbar = id + 1;
@@ -72,8 +72,9 @@ public class PhilosophenPart2 extends Thread{
                 mutex.release();
                 PhilosphenWarteschlange[id].acquire();
                 essen(id);
-                EssendePhilosophen[rechterNachbar] = false;
+
                 mutex.acquire();
+                EssendePhilosophen[id] = false;
 
                 for (int i = 0; i < 5; i++) {
                     //gJ

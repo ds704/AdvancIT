@@ -22,18 +22,9 @@ public class Aufgabe1a extends Thread{
 
     static Aufgabe1a[] ZugArray = new Aufgabe1a[2];
 
-    static Semaphore mutex = new Semaphore(1, true);
-
     static Semaphore full ;
 
-    static Semaphore empty;// = new Semaphore(1, true);
-
-    static Semaphore Weichebelegt = new Semaphore(1, true);
-
-    static int ctr = 0;
-
-    static int FreifahrtenZug0 = 0;
-    static int FreifahrtenZug1 = 0;
+    static Semaphore empty;
 
     public Aufgabe1a(int id)
     {
@@ -46,9 +37,8 @@ public class Aufgabe1a extends Thread{
         {
             while(id == 0)
             {
+                Thread.sleep(300); // Zug verlangsamen
                 enterLok0();
-
-                //enterLok1();
                 exitLok0();
             }
             while (id == 1)
@@ -64,41 +54,27 @@ public class Aufgabe1a extends Thread{
         }
     }
 
-    public void enterLok0()
+    public void enterLok0()  throws InterruptedException
     {
         empty.acquire();
-        Weichebelegt.acquire();
-
-
-
-
+        System.out.println("Lok 0 fährt in den Kritischen Abschnitt");
     }
 
-    public void exitLok0()
+    public void exitLok0()  throws InterruptedException
     {
-        Weichebelegt.release();
-        /*mutex.acquire();
-        ctr++;
-        FreifahrtenZug0--;
-        FreifahrtenZug1++;
-        mutex.release();*/
-        full.release();
+       full.release();
+       System.out.println("Lok 0 verlässt den Kritischen Abschnitt");
     }
 
-    public void enterLok1()
+    public void enterLok1() throws InterruptedException
     {
         full.acquire();
-        Weichebelegt.acquire();
+        System.out.println("Lok  1 fährt in den Kritischen Abschnitt");
     }
 
-    public void exitLok1()
+    public void exitLok1() throws InterruptedException
     {
-        Weichebelegt.release();
-        mutex.acquire();
-        ctr--;
-        FreifahrtenZug0++;
-        FreifahrtenZug1--;
-        mutex.release();
-        empty.release();
+       empty.release();
+       System.out.println("Lok 1 verlässt den Kritischen Abschnitt");
     }
 }

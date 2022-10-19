@@ -27,6 +27,7 @@ public class Aufgabe1b extends Thread {
     public void run() {
         try { //hier muss gescand werden um welche Lok es sich handelt, da Aufgabenstellung unterschiedliche Methoden für die Züge fordert
             while (id == 0) {
+                Thread.sleep(300); // Zug verlangsamen
                 enterLok0();
                 exitLok0();
             }
@@ -62,7 +63,7 @@ public class Aufgabe1b extends Thread {
     }
 
     private void enterMutex() {
-        //hier wird sich an die Wiche angestellt, entweder ist die Wiche bereits umgestellt, dann kann der Zug durchfahren. Wenn nicht muss er warten
+        //hier wird sich an die Weiche angestellt, entweder ist die We  iche bereits umgestellt, dann kann der Zug durchfahren. Wenn nicht muss er warten
         try {
             WarteschlangeSemaphore[id].acquire();
             System.out.println("Der Zug nummer: " + id + " fährt jetzt");
@@ -75,7 +76,7 @@ public class Aufgabe1b extends Thread {
 
     private void exitMutex()
     {
-        //hier wird die Wiche umgestellt, dass der ander Zug durchfahren kann
+        //hier wird die Weiche umgestellt, dass der ander Zug durchfahren kann
         int andererZug = id - 1;
         if (id == 0) {
             andererZug = 1;

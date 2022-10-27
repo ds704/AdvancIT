@@ -52,7 +52,10 @@ public class ServerFile {
                     break;
                 }
             }
-            System.out.println(datei.readLine(filename, zeilennummer2));
+            String ergebnis = datei.readLine(filename, zeilennummer2);
+            System.out.println(ergebnis);
+            DatagramPacket SendendesPacket = new DatagramPacket(ergebnis.getBytes(), ergebnis.length(), dp.getAddress(), dp.getPort());
+            Server.send(SendendesPacket);
 
             System.out.println(ausgabe);
 

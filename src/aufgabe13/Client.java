@@ -38,6 +38,12 @@ public class Client {
                 //InetAddress dest = InetAddress.getByName("127.0.0.1");
                 SendendesPacket = new DatagramPacket(c, c.length, dest, port);
                 clienten.send(SendendesPacket);
+            byte[] antwortArray = new byte[100];
+            DatagramPacket antwortPacket = new DatagramPacket(antwortArray, antwortArray.length);
+            clienten.receive(antwortPacket);
+
+            String antwortString = new String(antwortPacket.getData(), 0, antwortPacket.getLength());
+            System.out.println(antwortString);
 
 
         }

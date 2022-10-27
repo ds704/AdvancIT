@@ -23,16 +23,24 @@ public class MyFile {
     public String readLine(String filename, int Zeilennummer) throws IOException {
         if(Zeilennummer > 0)
         {
+            try {
+                BufferedReader fileIn = new BufferedReader((new FileReader(filename)));
 
-            BufferedReader fileIn = new BufferedReader((new FileReader(filename)));
             String zeile = null;
             for (int i = 0; i < Zeilennummer; i++) {
                 zeile = fileIn.readLine();
             }
             return zeile;
+        }
+            catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         }else {
             return "Da gab es einen Fehler";
         }
+        return "Error";
     }
+
 }

@@ -35,7 +35,9 @@ public class Philosophen extends Thread{
         try{
             while(true) {
                     neuerMonitor.essenStarten(id);
-                Thread.sleep(1000);
+                //Thread.sleep(10000);
+                neuerMonitor.essenStoppen(id);
+
 
             }
 

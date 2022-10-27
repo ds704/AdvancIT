@@ -14,18 +14,19 @@ public class Monitor {
             System.out.println("Philosoph mit der id: " + id + " isst gerade!");
         }else {
             Philosophen.ZustandPhilosophen[id] = Philosophen.WARTEND;
-            Philosophen.PhilosophenArray[id].wait();
+            wait();
+            essenStarten(id);
         }
 
     }
-    private void essenStoppen(int id)
+    protected void essenStoppen(int id)
     {
         Philosophen.ZustandPhilosophen[id] = Philosophen.DENKEND;
         if(Philosophen.ZustandPhilosophen[(id+4)%5] == Philosophen.WARTEND)
         {
-            Philosophen.PhilosophenArray[(id+4)%5].notify();
+            notifyAll();
         }else if(Philosophen.ZustandPhilosophen[(id+1)%5] == Philosophen.WARTEND) {
-        Philosophen.PhilosophenArray[(id+4)%5].notify();
+            notifyAll();
     }
     }
 }

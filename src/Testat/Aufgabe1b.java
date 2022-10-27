@@ -9,7 +9,7 @@ public class Aufgabe1b extends Thread {
     private int id;
 
 
-    public static void main(String[] args) { //Semaphore werden erzeugt Zug 0 Darf laut Aufgabenstellung als erster fahren desswgen Semaphore -> 1
+    public static void main(String[] args) { //Semaphore werden erzeugt Zug 0 Darf laut Aufgabenstellung als erster fahren deswegen Semaphore -> 1
         WarteschlangeSemaphore[0] = new Semaphore(1, true);
         WarteschlangeSemaphore[1] = new Semaphore(0, true);
         for (int i = 0; i < 2; i++) {
@@ -63,7 +63,7 @@ public class Aufgabe1b extends Thread {
     }
 
     private void enterMutex() {
-        //hier wird sich an die Weiche angestellt, entweder ist die We  iche bereits umgestellt, dann kann der Zug durchfahren. Wenn nicht muss er warten
+        //hier wird sich an die Weiche angestellt, entweder ist die Weiche bereits umgestellt, dann kann der Zug durchfahren. Wenn nicht, muss er warten
         try {
             WarteschlangeSemaphore[id].acquire();
             System.out.println("Der Zug nummer: " + id + " fährt jetzt");

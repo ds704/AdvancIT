@@ -12,7 +12,7 @@ public class Client {
     static String Input;
     //static DatagramSocket clienten;
     static DatagramPacket SendendesPacket;
-    static int port = 4999;
+    static int port = 4998;
     public static void main(String[] args) throws IOException {
         //j
         try (DatagramSocket clienten = new DatagramSocket()) {
@@ -20,7 +20,7 @@ public class Client {
             Scanner systemIn = new Scanner(System.in);
 
             Input = "Hallo Daniel";
-            InetAddress dest = InetAddress.getByName("127.0.0.1");
+            InetAddress dest = InetAddress.getByName("255.255.255.255");
             SendendesPacket = new DatagramPacket(Input.getBytes(), Input.length(), dest, port);
             clienten.send(SendendesPacket);
 

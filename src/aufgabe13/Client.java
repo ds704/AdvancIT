@@ -1,6 +1,8 @@
 package aufgabe13;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,7 +14,7 @@ public class Client {
     static String Input;
     //static DatagramSocket clienten;
     static DatagramPacket SendendesPacket;
-    static int port = 4998;
+    static int port = 5999;
     public static void main(String[] args) throws IOException {
         //j
         try (DatagramSocket clienten = new DatagramSocket()) {
@@ -20,7 +22,7 @@ public class Client {
             Scanner systemIn = new Scanner(System.in);
 
             Input = "Hallo Daniel";
-            InetAddress dest = InetAddress.getByName("255.255.255.255");
+            InetAddress dest = InetAddress.getByName("127.0.0.1");
             SendendesPacket = new DatagramPacket(Input.getBytes(), Input.length(), dest, port);
             clienten.send(SendendesPacket);
 
@@ -29,12 +31,14 @@ public class Client {
         {
             //System.out.println(System.in);
 
-            String c = systemIn.next();
+            //String c = systemIn.next();
+            BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
+            byte[] c = userIn.readLine().getBytes();
 
                 //InetAddress dest = InetAddress.getByName("127.0.0.1");
-                SendendesPacket = new DatagramPacket(c.getBytes(), c.length(), dest, port);
+                SendendesPacket = new DatagramPacket(c, c.length, dest, port);
                 clienten.send(SendendesPacket);
-                c = "";
+
 
         }
         } catch (SocketException e) {

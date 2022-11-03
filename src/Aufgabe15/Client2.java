@@ -18,12 +18,13 @@ public class Client2 {
         //j
         try (DatagramSocket clienten = new DatagramSocket()) {
 
-            Scanner systemIn = new Scanner(System.in);
+            /*Scanner systemIn = new Scanner(System.in);
 
             Input = "Hallo Daniel";
-            InetAddress dest = InetAddress.getByName("127.0.0.1");
+
             SendendesPacket = new DatagramPacket(Input.getBytes(), Input.length(), dest, port);
-            clienten.send(SendendesPacket);
+            clienten.send(SendendesPacket);*/
+            InetAddress dest = InetAddress.getByName("127.0.0.1");
 
 
             while(true)

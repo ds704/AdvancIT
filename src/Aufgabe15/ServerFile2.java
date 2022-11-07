@@ -21,31 +21,22 @@ public class ServerFile2 extends Thread {
         }
     }
 
-    static MyFile2 datei;
-
-    static {
-        try {
-            datei = new MyFile2();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    private MyFile2 datei;
     private String ausgabe;
     private InetAddress adresse;
     private String port;
     private byte[] data = new byte[9999];
     private DatagramPacket datenpacket = new DatagramPacket(data, 9999);;
-    public ServerFile2(String ausgabe, InetAddress dest, String port)
-    {
-        this.ausgabe = ausgabe;
-        this.adresse = dest;
-        this.port = port;
-    }
+
 
     public ServerFile2(DatagramPacket dp)
     {
         this.datenpacket = dp;
+        try {
+            datei = new MyFile2();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         //this.adresse = dest;
         //this.port = port;
     }

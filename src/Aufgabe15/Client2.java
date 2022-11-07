@@ -18,24 +18,14 @@ public class Client2 {
         //j
         try (DatagramSocket clienten = new DatagramSocket()) {
 
-            /*Scanner systemIn = new Scanner(System.in);
-
-            Input = "Hallo Daniel";
-
-            SendendesPacket = new DatagramPacket(Input.getBytes(), Input.length(), dest, port);
-            clienten.send(SendendesPacket);*/
             InetAddress dest = InetAddress.getByName("127.0.0.1");
 
 
             while(true)
             {
-                //System.out.println(System.in);
 
-                //String c = systemIn.next();
                 BufferedReader userIn = new BufferedReader(new InputStreamReader(System.in));
                 byte[] c = userIn.readLine().getBytes();
-
-                //InetAddress dest = InetAddress.getByName("127.0.0.1");
                 SendendesPacket = new DatagramPacket(c, c.length, dest, port);
                 clienten.send(SendendesPacket);
                 byte[] antwortArray = new byte[100];

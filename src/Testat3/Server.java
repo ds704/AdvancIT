@@ -4,13 +4,21 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.concurrent.Semaphore;
 
 public class Server extends Thread {
 
-    private static String wdir = System.getProperty("user.home");
+    private static final String wdir = System.getProperty("user.home");
     static DatagramPacket[] ArrayAuftraegeThreads = new DatagramPacket[7];
     static Server[] ArrayThreads = new Server[7]; // ist eigentlich nicht notwendig, außer für Garbage-collector
     static DatagramSocket ds;
+    static int ctr = 0;
+    static int nextfree = 0;
+    static int nextfull = 0;
+    static Semaphore mutex = new Semaphore(1, true);
+    static Semaphore full = new Semaphore(0, true);
+    static Semaphore empty = new Semaphore(7, true);
+    static Monitor monitor = new Monitor();
 
     static {
         try {
@@ -22,9 +30,9 @@ public class Server extends Thread {
 
     private int id = -1;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
-        System.out.println("Se r v e r s u c c e s s f u l l y s t a r t e d on por t: 5999" ) ;
+        System.out.println("Server successfully started on port: 5999" ) ;
         for(int i = 0; i<7;i++)
         {
             ArrayThreads[i] = new Server(i);
@@ -34,14 +42,21 @@ public class Server extends Thread {
         {
             DatagramPacket dp = new DatagramPacket (new byte [65507] , 65507) ;
             ds.receive(dp);
-            for(int i = 0; i <7; i++)
+            empty.acquire();
+            mutex.acquire();
+            ArrayAuftraegeThreads[nextfree] = dp;
+            nextfree = nextfree+1%7;
+            ctr++;
+            mutex.release();
+            full.release();
+            /*for(int i = 0; i <7; i++)
             {
                 if(ArrayAuftraegeThreads[i] == null)
                 {
                     ArrayAuftraegeThreads[i] = dp;
                     break;
                 }
-            }
+            }*/
 
         }
     }
@@ -55,17 +70,20 @@ public class Server extends Thread {
     @Override
     public void run() {
         while (true) {
-            while(ArrayAuftraegeThreads[id] == null)
-            {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            DatagramPacket dp = null;
+            try {
+                full.acquire();
+                mutex.acquire();
+                ctr--;
+                dp = ArrayAuftraegeThreads[nextfull];
+                nextfull = nextfull+1%7;
+                mutex.release();
+                empty.release();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            DatagramPacket dp = ArrayAuftraegeThreads[id];
-            String param[] = null;
-            String param2[] = null;
+            String[] param = null;
+            String[] param2 = null;
             String filename;
             int lineNo = -1;
             MyFile f = null;
@@ -83,7 +101,9 @@ public class Server extends Thread {
                     lineNo = Integer.parseInt(param2[1].trim());
                     f = new MyFile();
                     System.out.println("Filename: "+ filename+ " Zeilennummer: "+ lineNo);
+                    monitor.startRead();
                     answer = f.readLine(filename, lineNo);
+                    monitor.endRead();
                 } catch (Exception e) {
                     answer = "!!! ERROR 901: bad READ command ";
                 } // catch
@@ -93,28 +113,29 @@ public class Server extends Thread {
                     param2 = param[1].split(",", 3);
                     filename = param2[0].trim();
                     lineNo = Integer.parseInt(param2[1].trim());
-                    newData = param2 [ 2 ] ;
-                    f = new MyFile() ;
-                    answer = f.write(filename, lineNo, newData) ;
-                } catch (NumberFormatException e) {
+                    newData = param2 [2];
+                    f = new MyFile();
+                    monitor.startWrite();
+                    answer = f.write(filename, lineNo, newData);
+                    monitor.endWrite();
+                } catch (NumberFormatException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
 
         } else {
             answer = "!! ERROR 902: unknown command ";
-
-             } // i f −e l s e
+             }
 
         try {
             System.out.println("Die Antwort ist: "+ answer);
             DatagramPacket dp2 = new DatagramPacket (answer.getBytes(),answer.length(), dp.getAddress(), dp.getPort());
             ds.send(dp2);
-            System.out.println("Antowrt ist gesendet");
+            System.out.println("Antwort ist gesendet");
         } catch ( Exception e ){ e.printStackTrace() ;
         }
 
-            ArrayAuftraegeThreads[id] = null;
         }
+
 
 
     }
